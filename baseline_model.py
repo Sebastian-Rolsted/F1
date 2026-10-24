@@ -18,13 +18,13 @@ def last_winner_acc(year):
         if i.EventFormat != 'testing':
             rounds += 1
 
-    for round in range(1,rounds+1):
+    for n_round in range(1,rounds+1):
         
-        race = fastf1.get_session(year, round, 'R')
+        race = fastf1.get_session(year, n_round, 'R')
         race.load(laps=False, telemetry=False, weather=False, messages=False)
         this_winner = race.results.LastName.iloc[0]
 
-        print(f'This is the {round} of {rounds} in {race.event.EventName}')
+        print(f'This is the {n_round} of {rounds} in {race.event.EventName}')
         print(f'The winner was {this_winner}')
         
         if race.event.RoundNumber == 1:

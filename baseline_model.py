@@ -5,6 +5,9 @@ import matplotlib.pylab as plt
 import seaborn as sns
 from IPython.display import display as dp
 
+
+fastf1.set_log_level('ERROR')
+
 def last_winner_acc(year):
     print(f'The start of the funktion. The year is {year}.\n')
     rounds = 0
@@ -15,7 +18,7 @@ def last_winner_acc(year):
         if i.EventFormat != 'testing':
             rounds += 1
 
-    for round in range(1,rounds):
+    for round in range(1,rounds+1):
         
         race = fastf1.get_session(year, round, 'R')
         race.load(laps=False, telemetry=False, weather=False, messages=False)
@@ -37,10 +40,10 @@ def last_winner_acc(year):
                 wrong += 1
             last_winner = this_winner
 
-            correct_acc = (correct/rounds)*100
-            wrong_acc = (wrong/rounds)*100
+    correct_acc = round((correct/(correct+wrong))*100, 2)
+    wrong_acc = round((wrong/(correct+wrong))*100,2)
 
-            print(f'This model were correct in {correct_acc}% of the cases')
+    print(f'This model were correct in {correct_acc}% of the cases')
     return correct, wrong
 
 correct, wrong = last_winner_acc(2025)

@@ -28,6 +28,8 @@ def df_per_season(year):
         event_name = race.event.Location
 
         for i in range(0,len(race.results)):
+            if (pd.isna(race.results.GridPosition.iloc[i])) or (pd.isna(race.results.Position.iloc[i])):
+                 continue
             f = race.results.FirstName.iloc[i]
             l = race.results.LastName.iloc[i]
             driver = f + ' ' + l
@@ -36,7 +38,7 @@ def df_per_season(year):
             df.loc[len(df)] = append
 
         print(f'Round {n_round} in {year} complitede')
-        time.sleep(5)
+        time.sleep(1)
 
     return df
 

@@ -1,0 +1,4 @@
+data/
+.DS_Store
+test.ipynb
+__pycache__/

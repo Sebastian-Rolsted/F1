@@ -42,8 +42,31 @@ def df_per_season(year):
 
     return df
 
-print('What year do you want to make a DataFrame about?')
-year = int(input())
+#print('What year do you want to make a DataFrame about?')
+#year = int(input())
 
-season_df = df_per_season(year=year)
-season_df.to_csv(end_dir / f'df_{year}.csv', index=False)
+#season_df = df_per_season(year=year)
+#season_df.to_csv(end_dir / f'df_{year}.csv', index=False)
+
+
+
+def load_data(year):
+    dir = Path('/Users/Sebastian_Keller_Rolsted/ML_projekts/F1/data/')
+    df = pd.read_csv(dir / f'df_{year}.csv')
+    return df
+def add_wc_leader():
+    for year in range(2018,2026,1):
+        print(year)
+        data = load_data(year)
+        time.sleep(2)
+        data['wc_leader'] = 0
+        for i in range(1, data['round'].nunique()+1):
+            print(i)
+            ergast = Ergast()
+            round = ergast.get_driver_standings(season=year,round=i)
+            wc_leader = round.content[0].givenName.iloc[0] + ' ' + round.content[0].familyName.iloc[0]
+            
+
+            data.loc[(data['round']== i+1) & (data['driver'] == wc_leader), 'wc_leader'] = 1
+            time.sleep(1)
+        data.to_csv(end_dir / f'df_{year}.csv', index=False)

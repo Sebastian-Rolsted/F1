@@ -70,3 +70,37 @@ def add_wc_leader():
             data.loc[(data['round']== i+1) & (data['driver'] == wc_leader), 'wc_leader'] = 1
             time.sleep(1)
         data.to_csv(end_dir / f'df_{year}.csv', index=False)
+
+def add_last_win_leader():
+    for year in range(2018,2026,1):
+        print(year)
+        data = load_data(year)
+        
+        data['win_last_race'] = 0
+        for i in range(1, data['round'].nunique()+1):
+            print(i)
+            index = int(data.index[(data['round']==i) & (data['finision_possion']== 1)][0])
+            last_winner = data['driver'].iloc[index]
+            print(index)
+            print(last_winner)
+
+            data.loc[(data['round']== i+1) & (data['driver'] == last_winner), 'win_last_race'] = 1
+        data.to_csv(end_dir / f'df_{year}.csv', index=False)
+
+#combine all DF
+def combine_df():
+    all_season = []
+    for year in range(2018,2026,1):
+            print(year)
+            all_season.append(load_data(year))
+
+    all_season_df = pd.concat(all_season, ignore_index=True)
+    all_season_df['circuit'] = all_season_df['circuit'].replace({'Yas Island': 'Yas Marina', 'Monte Carlo': 'Monaco', 'Marina Bay': 'Singapore', 'Miami Gardens': 'Miami'})
+    all_season_df.to_csv(end_dir/'all_seasons.csv', index=False)
+
+    return all_season_df
+
+
+
+
+

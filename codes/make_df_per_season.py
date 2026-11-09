@@ -96,11 +96,12 @@ def combine_df():
 
     all_season_df = pd.concat(all_season, ignore_index=True)
     all_season_df['circuit'] = all_season_df['circuit'].replace({'Yas Island': 'Yas Marina', 'Monte Carlo': 'Monaco', 'Marina Bay': 'Singapore', 'Miami Gardens': 'Miami'})
+    all_season_df['driver'] = all_season_df['driver'].replace({'Andrea Kimi Antonelli': 'Kimi Antonelli'})
     all_season_df.to_csv(end_dir/'all_seasons.csv', index=False)
 
     return all_season_df
 
 
-
+combine_df()
 
 

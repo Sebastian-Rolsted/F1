@@ -91,12 +91,23 @@ def add_last_win_leader():
 def combine_df():
     all_season = []
     for year in range(2018,2026,1):
-            print(year)
-            all_season.append(load_data(year))
+        print(year)
+        all_season.append(load_data(year))
 
     all_season_df = pd.concat(all_season, ignore_index=True)
     all_season_df['circuit'] = all_season_df['circuit'].replace({'Yas Island': 'Yas Marina', 'Monte Carlo': 'Monaco', 'Marina Bay': 'Singapore', 'Miami Gardens': 'Miami'})
     all_season_df['driver'] = all_season_df['driver'].replace({'Andrea Kimi Antonelli': 'Kimi Antonelli'})
+    team_names = {
+        'Force India': 'Aston Martin',
+        'Racing Point': 'Aston Martin',
+        'Toro Rosso': 'Racing Bulls',
+        'AlphaTauri': 'Racing Bulls',
+        'RB': 'Racing Bulls',
+        'Sauber': 'Kick Sauber',
+        'Alfa Romeo Racing': 'Kick Sauber',
+        'Alfa Romeo': 'Kick Sauber',
+        'Renault': 'Alpine',}
+    all_season_df['team_newest_name'] = all_season_df['team'].replace(team_names)
     all_season_df.to_csv(end_dir/'all_seasons.csv', index=False)
 
     return all_season_df

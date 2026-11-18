@@ -12,6 +12,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
+from baseline_model import evaluation as eval_last_winner
+from wc_leader_predict import evaluation as eval_wc_leader
 
 
 fastf1.set_log_level('ERROR')
@@ -23,7 +25,7 @@ features = ['wc_leader', 'win_last_race',
             'form_driver_3_races', 'form_team_3_races',
             'track_result_filled', 'track_avg3_result_filled',
             'team_track_result_filled',
-            'last_race', 'driver_vs_team', 'driver_vs_team_avg3']
+            'last_race', 'driver_vs_team', 'driver_vs_team_avg3', 'team_form_vs_previerions_form']
 outcome = 'winner'
 
 
@@ -113,7 +115,11 @@ if __name__ == '__main__':
             print(coefs)
             print()
             print(model.named_steps['model'].class_weight)
-            performance = {'year': year, 'versions':name, 'train_acc': train_acc, 'val_acc': val_acc}
+            last_winner_df = eval_last_winner(year)
+            last_winner_acc = last_winner_df['correct_acc'].iloc[0]/100
+            wc_leader_df = eval_wc_leader(year)
+            wc_leader_acc =   wc_leader_df['correct_acc'].iloc[0]/100
+            performance = {'year': year, 'versions':name, 'train_acc': train_acc, 'val_acc': val_acc, 'last_winner': last_winner_acc, 'wc_leader': wc_leader_acc}
             model_performance.append(performance)
 
     performance_df = pd.DataFrame(model_performance)
